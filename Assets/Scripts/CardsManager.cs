@@ -20,8 +20,8 @@ public class CardsManager : MonoBehaviour
     public Canvas canvas;
 
     [Header("Settings")]
-    [Range(0,12)] public int MaxCards = 6;
-    [Range(0, 12)] public int StartingAmount = 6;
+    [Range(0,12)] public int MaxCards = 2;
+    [Range(0, 12)] public int StartingAmount = 2;
 
     [Header("Lists")]
     public List<CardType> CardTypes = new List<CardType>();

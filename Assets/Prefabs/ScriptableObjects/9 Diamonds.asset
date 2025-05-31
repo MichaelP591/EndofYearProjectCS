@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
-  m_Name: Ace 2
+  m_Name: 9 Diamonds
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 21300000, guid: eda84147f4513ee468ef3478e62cc74b, type: 3}
-  MaxCardNumber: 1
-  setAmount: 1
+  CardIcon: {fileID: 0}
+  MaxCardNumber: 0
+  setAmount: 0

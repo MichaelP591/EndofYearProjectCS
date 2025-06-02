@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
   m_Name: Ace Hearts
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 21300000, guid: eda84147f4513ee468ef3478e62cc74b, type: 3}
+  CardIcon: {fileID: 21300000, guid: 4fc7b2847d523394f97f73eb18f2de3d, type: 3}
   MaxCardNumber: 1
   setAmount: 1

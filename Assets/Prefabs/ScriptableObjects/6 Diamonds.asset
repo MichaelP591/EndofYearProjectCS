@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
   m_Name: 6 Diamonds
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 0}
+  CardIcon: {fileID: 21300000, guid: 23c5f592c265e714fbc2cee3a40c929d, type: 3}
   MaxCardNumber: 0
   setAmount: 0

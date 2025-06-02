@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
   m_Name: 10 Hearts
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 0}
+  CardIcon: {fileID: 21300000, guid: c7e1448c356dae7438662a898558651d, type: 3}
   MaxCardNumber: 0
   setAmount: 0

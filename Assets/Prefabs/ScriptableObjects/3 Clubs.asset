@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
   m_Name: 3 Clubs
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 0}
+  CardIcon: {fileID: 21300000, guid: 6b687beff364b1348a14eec9afd9b98a, type: 3}
   MaxCardNumber: 0
   setAmount: 0

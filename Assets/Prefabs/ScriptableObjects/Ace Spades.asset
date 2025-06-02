@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0025fdf66aea7be4eabbcd0214988f9e, type: 3}
   m_Name: Ace Spades
   m_EditorClassIdentifier: 
-  CardIcon: {fileID: 21300000, guid: b4f486485428e0143ad03269ec739999, type: 3}
+  CardIcon: {fileID: 21300000, guid: ef9b49ba778b54f438307d9cea9c2d4e, type: 3}
   MaxCardNumber: 1
   setAmount: 1

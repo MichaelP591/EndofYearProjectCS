@@ -29,7 +29,7 @@ namespace BaseGame
             { 
                 if (value.Length == 2) cards = value; 
                 foreach (PokerCard card in cards) {
-                    cardsManager.AddCard(card);
+                    cardsManager.AddCard(card); 
                 }
             }    
         }

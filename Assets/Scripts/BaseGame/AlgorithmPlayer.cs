@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BaseGame;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BaseGame
 {

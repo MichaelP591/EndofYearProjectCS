@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine.Rendering.Universal.Internal;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace BaseGame.Tests
 {

@@ -9,7 +9,6 @@ namespace BaseGame
 {
     public class HumanPlayer : Player
     {
-        List<Card> hand = new List<Card>();
         public override void MakeMove()
         {
             

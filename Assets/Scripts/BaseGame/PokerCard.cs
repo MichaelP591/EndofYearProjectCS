@@ -10,7 +10,9 @@ namespace BaseGame
     {
         [SerializeField] int num;
         [SerializeField] string suit;
-        List<string> suits = new List<string>{ "ace", "spade", "heart", "club" };
+        private bool isFaceUp = false;
+        List<string> suits = new List<string>{ "diamond", "spade", "heart", "club" };
+        public bool IsFaceUp { get { return isFaceUp; } set { isFaceUp = value; } }
         public PokerCard(int number, string suit)
         {
             num = number;

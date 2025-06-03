@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using BaseGame;
 using NUnit.Framework.Constraints;
+using UnityEngine;
 
 namespace BaseGame
 {
-    public class Card
+    public class PokerCard : MonoBehaviour
     {
-        private int num;
-        private string suit;
+        [SerializeField] int num;
+        [SerializeField] string suit;
         List<string> suits = new List<string>{ "ace", "spade", "heart", "club" };
-        public Card(int number, string suit)
+        public PokerCard(int number, string suit)
         {
             num = number;
             this.suit = suit;
@@ -26,19 +27,19 @@ namespace BaseGame
         {
             return suit;
         }
-        public bool Equals(Card obj)
+        public bool Equals(PokerCard obj)
         {
             return obj.GetCardNumber() == this.GetCardNumber() && obj.GetSuit() == this.GetSuit();
         }
-        public bool IsSameSuit(Card obj)
+        public bool IsSameSuit(PokerCard obj)
         {
             return obj.GetSuit() == this.GetSuit();
         }
-        public bool IsSameNum(Card obj)
+        public bool IsSameNum(PokerCard obj)
         {
             return obj.GetCardNumber() == this.GetCardNumber();
         }
-        public int CompareTo(Card obj)
+        public int CompareTo(PokerCard obj)
         {
             if (obj == null) throw new System.Exception("Card is null");
             if (this.Equals(obj)) return 0;

@@ -1,15 +1,38 @@
+using System;
+using System.Collections.Generic;
 using BaseGame;
+using UnityEngine;
 
 namespace BaseGame
 {
-    public abstract class Player
+    public abstract class Player : MonoBehaviour
     {
-
-        protected int balance;  // Added protected field for balance
-        private bool inGame = true;
-
-        private Card[] cards = new Card[2];
-
+        int balance;
+        protected ChipBalance chipBalance = new ChipBalance();
+        protected bool inGame = true;
+        protected PokerCard[] cards = new PokerCard[2];
+        private bool isTurn;
+        void Update()
+        {
+            if (isTurn)
+            {
+                MakeMove();
+            }
+        }
+        public bool IsTurn { get { return isTurn; }  set { isTurn = value; } }
+        public PokerCard[] Hand { get { return cards; } set { if (value.Length == 2) cards = value; } }
+        public int Balance { get { return balance; } set { balance = value; } }
+        public abstract void MakeMove();
+        public abstract int GetHighestCard();
+        public abstract int FindPair();
+        public abstract int FindTwoPair();
+        public abstract int FindThreeOfKind();
+        public abstract int FindStraight();
+        public abstract string FindFlush();
+        public abstract int FindFullHouse();
+        public abstract int FindFourOfKind();
+        public abstract int FindStraightFlush(); 
+        public abstract bool HasRoyalFlush();
         public void Fold() {
             inGame = false;
         }
@@ -19,8 +42,6 @@ namespace BaseGame
             balance -= amount;
             return amount;
         }
-
-
         public int Raise(int value) {
             if (value <= balance)
             {
@@ -29,38 +50,20 @@ namespace BaseGame
             }
             return balance;
         }
-
         public int AllIn()
         {
+            int temp = balance;
             balance = 0;
-            return balance;
+            return temp;
         }
-
-        public void Check()
+        public int Check()
         {
-            
+            return Raise(0);
         }
-
-        public int GetBalance()
-        {
-            return balance;
-        }
-
-        public Card[] GetHand()
-        {
-            return cards;
-        }
-
         public void AddBalance(int amount)
         {
             balance += amount;
         }
-
-        public void SetBalance(int amount)
-        {
-            balance = amount;
-        }
-
         public void RemoveBalance(int amount)
         {
             balance -= amount;

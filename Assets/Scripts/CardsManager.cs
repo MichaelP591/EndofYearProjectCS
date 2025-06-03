@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using BaseGame;
 
 public class CardsManager : MonoBehaviour
 {
@@ -125,7 +126,7 @@ public class CardsManager : MonoBehaviour
             GameObject card = Instantiate(CardParent, DefualtCardsLayoutGroup.transform);
             int rank = pokerCard.GetCardNumber(); // gives values from 2-14 (2-ace)
             string suit = pokerCard.GetSuit(); // gives "club" or other
-            List<string> suitArray = new List<string>{ "ace", "spade", "heart", "club" };
+            List<string> suitArray = new List<string>{ "diamond", "spade", "heart", "club" };
 
 
             card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + rank];

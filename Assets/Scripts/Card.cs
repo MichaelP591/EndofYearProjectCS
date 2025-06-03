@@ -48,7 +48,6 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
         //Configure the card
         cardsManager.SelectedCard = gameObject;
-        cardsManager.GetComponent<AudioSource>().Play();
         GetComponent<Image>().raycastTarget = false;
     }
 
@@ -87,7 +86,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         {
             transform.transform.localPosition = Vector2.zero;
         }
-        cardsManager.GetComponent<AudioSource>().Play();
+        
         GetComponent<Image>().raycastTarget = true;
     }
     

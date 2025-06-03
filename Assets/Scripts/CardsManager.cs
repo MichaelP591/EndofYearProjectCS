@@ -99,7 +99,7 @@ public class CardsManager : MonoBehaviour
 
         targetCard.transform.localPosition = Vector2.zero;
 
-        GetComponent<AudioSource>().Play();
+       
     }
 
     public void AddCard(int amount)

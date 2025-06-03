@@ -9,6 +9,8 @@ namespace BaseGame
     public abstract class Player : MonoBehaviour
     {
         int balance;
+        protected bool areCardsShowing = false;
+        CardsManager cardsManager = new CardsManager();
         protected ChipBalance chipBalance = new ChipBalance();
         protected bool inGame = true;
         protected PokerCard[] cards = new PokerCard[2];
@@ -21,7 +23,16 @@ namespace BaseGame
             }
         }
         public bool IsTurn { get { return isTurn; }  set { isTurn = value; } }
-        public PokerCard[] Hand { get { return cards; } set { if (value.Length == 2) cards = value; } }
+        public PokerCard[] Hand {
+            get { return cards; }
+            set 
+            { 
+                if (value.Length == 2) cards = value; 
+                foreach (PokerCard card in cards) {
+                    cardsManager.AddCard(card);
+                }
+            }    
+        }
         public int Balance { get { return balance; } set { balance = value; } }
         public abstract void MakeMove();
         public abstract int GetHighestCard();

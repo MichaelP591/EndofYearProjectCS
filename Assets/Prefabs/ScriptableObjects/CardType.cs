@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using BaseGame;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CardTypeScriptibleObject", menuName = "CardType/CardTypeScriptibleObject")]

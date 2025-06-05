@@ -125,10 +125,10 @@ public class CardsManager : MonoBehaviour
             GameObject card = Instantiate(CardParent, DefualtCardsLayoutGroup.transform);
             int rank = pokerCard.GetCardNumber(); // gives values from 2-14 (2-ace)
             string suit = pokerCard.GetSuit(); // gives "club" or other
-            List<string> suitArray = new List<string>{ "ace", "spade", "heart", "club" };
+            List<string> suitArray = new List<string>{ "diamond", "spade", "heart", "club" };
 
 
-            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + rank];
+            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + (rank - 2)];
             GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
 
             cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;

@@ -102,7 +102,6 @@ public class CardsManager : MonoBehaviour
 
        
     }
-
     public void AddCard(int amount)
     {
         for (int i = 0; i < amount; i++)

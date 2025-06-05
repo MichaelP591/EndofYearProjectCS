@@ -107,7 +107,6 @@ public class CardsManager : MonoBehaviour
 
 
     }
-
     public void AddCard(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -134,7 +133,7 @@ public class CardsManager : MonoBehaviour
             List<string> suitArray = new List<string> { "diamond", "spade", "heart", "club" };
 
 
-            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + rank];
+            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + (rank - 2)];
             GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
 
             cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;

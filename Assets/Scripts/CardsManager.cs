@@ -6,8 +6,13 @@ using UnityEngine.UI;
 using TMPro;
 using BaseGame;
 
+
 public class CardsManager : MonoBehaviour
 {
+    [Header("Multiple Hands Support")]
+    public HorizontalLayoutGroup PlayerHandLayout;
+    public HorizontalLayoutGroup DealerHandLayout;
+
     [HideInInspector] public GameObject SelectedCard;
     [HideInInspector] public GameObject HoveringMenu;
     [HideInInspector] public CardType cardType;
@@ -21,7 +26,7 @@ public class CardsManager : MonoBehaviour
     public Canvas canvas;
 
     [Header("Settings")]
-    [Range(0,12)] public int MaxCards = 2;
+    [Range(0, 12)] public int MaxCards = 2;
     [Range(0, 12)] public int StartingAmount = 2;
 
     [Header("Lists")]
@@ -31,8 +36,8 @@ public class CardsManager : MonoBehaviour
     private void Start()
     {
         //Initiate
-        if(StartingAmount > 0)
-        AddCard(StartingAmount);
+        if (StartingAmount > 0)
+            AddCard(StartingAmount);
     }
 
     private void Update()
@@ -100,7 +105,7 @@ public class CardsManager : MonoBehaviour
 
         targetCard.transform.localPosition = Vector2.zero;
 
-       
+
     }
 
     public void AddCard(int amount)
@@ -119,14 +124,14 @@ public class CardsManager : MonoBehaviour
             }
         }
     }
-    public void AddCard(PokerCard pokerCard) 
+    public void AddCard(PokerCard pokerCard)
     {
         if (DefualtCardsLayoutGroup.transform.childCount < MaxCards)
         {
             GameObject card = Instantiate(CardParent, DefualtCardsLayoutGroup.transform);
             int rank = pokerCard.GetCardNumber(); // gives values from 2-14 (2-ace)
             string suit = pokerCard.GetSuit(); // gives "club" or other
-            List<string> suitArray = new List<string>{ "diamond", "spade", "heart", "club" };
+            List<string> suitArray = new List<string> { "diamond", "spade", "heart", "club" };
 
 
             card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + rank];
@@ -135,4 +140,28 @@ public class CardsManager : MonoBehaviour
             cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;
         }
     }
+
+    public void AddCardToHand(HorizontalLayoutGroup handLayout, int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            if (handLayout.transform.childCount < MaxCards)
+            {
+                GameObject card = Instantiate(CardParent, handLayout.transform);
+                int randomCard = Random.Range(0, CardTypes.Count);
+
+                card.GetComponentInChildren<Card>().cardType = CardTypes[randomCard];
+
+                GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
+                cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;
+            }
+        }
+    }
+    public void DrawCard()
+    {
+        AddCardToHand(PlayerHandLayout, 1);
+        AddCardToHand(DealerHandLayout, 1);
+    }
+
+
 }

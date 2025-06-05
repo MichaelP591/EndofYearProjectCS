@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using BaseGame;
 
 public class CardsManager : MonoBehaviour
 {
@@ -101,7 +102,6 @@ public class CardsManager : MonoBehaviour
 
        
     }
-
     public void AddCard(int amount)
     {
         for (int i = 0; i < amount; i++)

@@ -9,10 +9,6 @@ using BaseGame;
 
 public class CardsManager : MonoBehaviour
 {
-    [Header("Multiple Hands Support")]
-    public HorizontalLayoutGroup PlayerHandLayout;
-    public HorizontalLayoutGroup DealerHandLayout;
-
     [HideInInspector] public GameObject SelectedCard;
     [HideInInspector] public GameObject HoveringMenu;
     [HideInInspector] public CardType cardType;
@@ -35,7 +31,6 @@ public class CardsManager : MonoBehaviour
 
     private void Start()
     {
-        //Initiate
         if (StartingAmount > 0)
             AddCard(StartingAmount);
     }
@@ -47,7 +42,6 @@ public class CardsManager : MonoBehaviour
 
     private void HandleCardMovments()
     {
-        //Make sure all variables are set
         if (SelectedCard == null)
             return;
 
@@ -71,7 +65,6 @@ public class CardsManager : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void PlayCard()
@@ -104,9 +97,8 @@ public class CardsManager : MonoBehaviour
         }
 
         targetCard.transform.localPosition = Vector2.zero;
-
-
     }
+
     public void AddCard(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -123,44 +115,8 @@ public class CardsManager : MonoBehaviour
             }
         }
     }
-    public void AddCard(PokerCard pokerCard)
+    public void AddCard(PokerCard card)
     {
-        if (DefualtCardsLayoutGroup.transform.childCount < MaxCards)
-        {
-            GameObject card = Instantiate(CardParent, DefualtCardsLayoutGroup.transform);
-            int rank = pokerCard.GetCardNumber(); // gives values from 2-14 (2-ace)
-            string suit = pokerCard.GetSuit(); // gives "club" or other
-            List<string> suitArray = new List<string> { "diamond", "spade", "heart", "club" };
-
-
-            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + (rank - 2)];
-            GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
-
-            cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;
-        }
+        
     }
-
-    public void AddCardToHand(HorizontalLayoutGroup handLayout, int amount)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            if (handLayout.transform.childCount < MaxCards)
-            {
-                GameObject card = Instantiate(CardParent, handLayout.transform);
-                int randomCard = Random.Range(0, CardTypes.Count);
-
-                card.GetComponentInChildren<Card>().cardType = CardTypes[randomCard];
-
-                GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
-                cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;
-            }
-        }
-    }
-    public void DrawCard()
-    {
-        AddCardToHand(PlayerHandLayout, 1);
-        AddCardToHand(DealerHandLayout, 1);
-    }
-
-
 }

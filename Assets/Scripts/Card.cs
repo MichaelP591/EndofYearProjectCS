@@ -68,7 +68,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             Transform target = transform.parent;
             transform.position = cardsManager.HoveringMenu.transform.position;
             transform.SetParent(cardsManager.HoveringMenu.transform);
-            Destroy(target.gameObject); // <-- This is the original behavior
+            Destroy(target.gameObject); // YES: This is part of the original logic
         }
         else
         {

@@ -15,7 +15,6 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public HolderType holderType;
 
-    //All states our card can be in
     public enum HolderType
     {
         Play, Discard, CardTrader, MainHolder
@@ -48,11 +47,10 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (cardsManager.SelectedCard != null && transform.childCount > 3)
                 {
-                    Debug.Log(cardsManager.SelectedCard.GetComponent<Card>().cardNumber);
-                    Debug.Log(transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardNumber);
-
-                    if (cardsManager.SelectedCard.GetComponent<Card>().cardNumber == transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardNumber ||
-                        cardsManager.SelectedCard.GetComponent<Card>().cardType.CardIcon == transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardType.CardIcon)
+                    if (cardsManager.SelectedCard.GetComponent<Card>().cardNumber ==
+                        transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardNumber ||
+                        cardsManager.SelectedCard.GetComponent<Card>().cardType.CardIcon ==
+                        transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardType.CardIcon)
                     {
                         available = transform.childCount - 3 < maxAmount;
                     }
@@ -88,7 +86,7 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(available)
+        if (available)
             cardsManager.HoveringMenu = gameObject;
     }
 

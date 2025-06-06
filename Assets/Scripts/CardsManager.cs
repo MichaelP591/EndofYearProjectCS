@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using BaseGame;
 
+
 public class CardsManager : MonoBehaviour
 {
     [HideInInspector] public GameObject SelectedCard;
@@ -21,7 +22,7 @@ public class CardsManager : MonoBehaviour
     public Canvas canvas;
 
     [Header("Settings")]
-    [Range(0,12)] public int MaxCards = 2;
+    [Range(0, 12)] public int MaxCards = 2;
     [Range(0, 12)] public int StartingAmount = 2;
 
     [Header("Lists")]
@@ -30,9 +31,8 @@ public class CardsManager : MonoBehaviour
 
     private void Start()
     {
-        //Initiate
-        if(StartingAmount > 0)
-        AddCard(StartingAmount);
+        if (StartingAmount > 0)
+            AddCard(StartingAmount);
     }
 
     private void Update()
@@ -42,7 +42,6 @@ public class CardsManager : MonoBehaviour
 
     private void HandleCardMovments()
     {
-        //Make sure all variables are set
         if (SelectedCard == null)
             return;
 
@@ -66,7 +65,6 @@ public class CardsManager : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void PlayCard()
@@ -99,9 +97,8 @@ public class CardsManager : MonoBehaviour
         }
 
         targetCard.transform.localPosition = Vector2.zero;
-
-       
     }
+
     public void AddCard(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -118,20 +115,8 @@ public class CardsManager : MonoBehaviour
             }
         }
     }
-    public void AddCard(PokerCard pokerCard) 
+    public void AddCard(PokerCard card)
     {
-        if (DefualtCardsLayoutGroup.transform.childCount < MaxCards)
-        {
-            GameObject card = Instantiate(CardParent, DefualtCardsLayoutGroup.transform);
-            int rank = pokerCard.GetCardNumber(); // gives values from 2-14 (2-ace)
-            string suit = pokerCard.GetSuit(); // gives "club" or other
-            List<string> suitArray = new List<string>{ "diamond", "spade", "heart", "club" };
-
-
-            card.GetComponentInChildren<Card>().cardType = CardTypes[suitArray.IndexOf(suit) * 13 + (rank - 2)];
-            GameObject cardFace = Instantiate(CardFace, GameObject.Find("CardVisuals").transform);
-
-            cardFace.GetComponent<CardFace>().target = card.GetComponentInChildren<Card>().gameObject;
-        }
+        
     }
 }

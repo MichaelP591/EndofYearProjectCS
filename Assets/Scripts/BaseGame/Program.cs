@@ -41,7 +41,7 @@ namespace BaseGame.Tests
         public static void TestPotOperations()
         {
             Assert.AreEqual(0, round.Pot);
-            round.AddToPot(100);
+            round.Pot += 100;
             Assert.AreEqual(100, round.Pot);
             round.Pot = 50;
             Assert.AreEqual(50, round.Pot);

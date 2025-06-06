@@ -4,14 +4,26 @@ using System.Linq;
 using BaseGame;
 using UnityEditor;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 namespace BaseGame
 {
     public class HumanPlayer : Player
     {
-        public override void MakeMove()
+        List<PokerCard> playerHand = new List<PokerCard>();
+        void Start()
+        {
+            playerHand.Add(cards[0]);
+            playerHand.Add(cards[1]);
+        }
+        void ChooseHand()
         {
             
+        }
+        public override int MakeMove()
+        {
+            //implement ui shit here mohit and max
+            return -1;
         }
         public override string FindFlush()
         {

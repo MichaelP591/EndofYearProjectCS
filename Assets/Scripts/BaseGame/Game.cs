@@ -22,6 +22,7 @@ public class Game : MonoBehaviour
     PokerCard[,] deck = new PokerCard[4, 13];
     string[] suits = { "diamond", "spade", "heart", "club" };
     private readonly System.Random random = new System.Random();
+    public int currentBet = 0;
     void Start()
     {
         for (int i = 0; i < humanPlayerCount; i++) { players.Add(new HumanPlayer()); }
@@ -79,7 +80,7 @@ public class Game : MonoBehaviour
     }
     private void ProcessBettingRound()
     {
-        int currentBet = 0;
+        currentBet = 0;
         bool bettingComplete = false;
 
         while (!bettingComplete)
@@ -101,30 +102,13 @@ public class Game : MonoBehaviour
                     currentBet = player.CurrentBet;
                     bettingComplete = false;  // Need another round if someone raises
                 }
-                else if (player.LastAction == Player.PlayerAction.Fold)
-                {
-                    player.IsTurn = false;
-                }
-                else if (player.LastAction == Player.PlayerAction.AllIn)
-                {
-                    player.IsTurn = false;
-                }
-                else if (player.LastAction == Player.PlayerAction.Check)
-                {
-                    
-                }
-                else if (player.LastAction == Player.PlayerAction.Call)
-                {
-
-                }
             }
         }
-        CreatePots(players, pots);
     }
     void CreatePots(List<Player> players, List<Pot> pots)
     {
         // Get distinct bet amounts in ascending order
-        var allInAmounts = players.Where(p => p.CurrentBet > 0).Select(p => p.CurrentBet).Distinct().OrderBy(b => b).ToList();
+        var allInAmounts = players.Where(p => p.CurrentBet > 0).Select(p => p.Stack).Distinct().OrderBy(b => b).ToList();
 
         int previous = 0;
 
@@ -157,6 +141,12 @@ public class Game : MonoBehaviour
                 winner.Stack += pot.Amount;
         }
     }
+    bool AnyoneIsAllIn()
+    {
+        int count = 0;
+        foreach (var player in players) if (player.LastAction == Player.PlayerAction.AllIn) count++; 
+        return count > 0;
+    }
     void PreFlop() //betting round before any cards are revealed
     {
         ProcessBettingRound();
@@ -177,20 +167,15 @@ public class Game : MonoBehaviour
     void River() //final betting round
     {
         ProcessBettingRound();
+        if (AnyoneIsAllIn()) CreatePots(players, pots);
     }
     void ShowDown() // reveal all cards and declare winner and split pot
     {
-        foreach (Player player in players)
-        {
-            player.RevealHand();
+        ResolvePots(pots);
+        foreach (var player in players) {
+            player.Stack = 0;
+            player.CurrentBet = 0;
         }
-        List<Player> winners = round.DeclareWinner(players);
-
-        int earnings = pots.ElementAt(0).Amount;
-        if (winners.Count != 0) earnings /= winners.Count ;
-        foreach (Player winner in winners)
-        {
-            winner.Balance += earnings;
-        }
+        pots.Clear();
     }
 }

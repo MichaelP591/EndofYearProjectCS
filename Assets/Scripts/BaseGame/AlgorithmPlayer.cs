@@ -11,9 +11,9 @@ namespace BaseGame
         private int totalSpent = 0;
         [SerializeField] GameObject round = new GameObject();
         private readonly System.Random random = new System.Random();
-        public override int MakeMove()
+        public override void MakeMove()
         {
-            return -1;
+            
         }
         double HandPotential() 
         {

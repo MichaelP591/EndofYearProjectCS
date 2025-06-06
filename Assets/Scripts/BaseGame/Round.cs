@@ -8,15 +8,12 @@ namespace BaseGame
     public class Round : MonoBehaviour
     {
         private readonly System.Random random = new System.Random();
-        private int pot;
         public HumanPlayer humanPlayer;
         private string[] suit = { "diamond", "spade", "heart", "club" };
         private List<Player> players;
         private PokerCard[] houseHand = new PokerCard[5];
         private int knownCardCount = 0;
         private List<PokerCard> knownCards;
-        public int AddToPot(int amount) { pot += amount; return pot; }
-        public int Pot { get { return pot; } set { pot = value; } }
         public PokerCard[] HouseHand { get { return houseHand; } set { houseHand = value; } }
         public void AddPlayer(Player player) { players.Add(player); }
         public void NextCard()
@@ -24,7 +21,7 @@ namespace BaseGame
             if (knownCardCount < houseHand.Length) knownCards.Add(houseHand[knownCardCount]);
             knownCards.Last().IsFaceUp = true;
         }
-        public List<Player> DeclareWinner()
+        public List<Player> DeclareWinner(List<Player> players)
         {
             List<int> bestHand = new List<int>();
             foreach (Player player in players)

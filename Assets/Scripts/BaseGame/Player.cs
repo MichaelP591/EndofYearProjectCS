@@ -73,16 +73,16 @@ namespace BaseGame
         }
         
         public void Check() { LastAction = PlayerAction.Check; CurrentBet = 0; }
-        public abstract void MakeMove();
-        public abstract int GetHighestCard();
-        public abstract int FindPair();
-        public abstract int FindTwoPair();
-        public abstract int FindThreeOfKind();
-        public abstract int FindStraight();
-        public abstract string FindFlush();
-        public abstract int FindFullHouse();
-        public abstract int FindFourOfKind();
-        public abstract int FindStraightFlush(); 
-        public abstract bool HasRoyalFlush();
+        public abstract void MakeBet(Game.BettingRound bettingRound);
+        protected abstract int GetHighestCard();
+        protected abstract int FindPair();
+        protected abstract int FindTwoPair();
+        protected abstract int FindThreeOfKind();
+        protected abstract int FindStraight();
+        protected abstract string FindFlush();
+        protected abstract int FindFullHouse();
+        protected abstract int FindFourOfKind();
+        protected abstract int FindStraightFlush(); 
+        protected abstract bool HasRoyalFlush();
     }
 }

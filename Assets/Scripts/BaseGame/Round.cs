@@ -13,7 +13,7 @@ namespace BaseGame
         private List<Player> players;
         private PokerCard[] houseHand = new PokerCard[5];
         private int knownCardCount = 0;
-        private List<PokerCard> knownCards;
+        public List<PokerCard> knownCards;
         public PokerCard[] HouseHand { get { return houseHand; } set { houseHand = value; } }
         public void AddPlayer(Player player) { players.Add(player); }
         public void NextCard()
@@ -248,10 +248,7 @@ namespace BaseGame
             for (int i = playerHand.Count() - 2; i > 0; i--)
             {
                 PokerCard card = playerHand.ElementAt(i);
-                if (card.CompareTo(playerHand.ElementAt(i - 1)) == 1 && card.CompareTo(playerHand.ElementAt(i + 1)) == -1)
-                {
-                    count++;
-                }
+                if (card.CompareTo(playerHand.ElementAt(i - 1)) == 1 && card.CompareTo(playerHand.ElementAt(i + 1)) == -1) count++;
             }
             if (count >= 3)
             {

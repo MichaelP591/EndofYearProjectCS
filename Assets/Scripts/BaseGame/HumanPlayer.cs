@@ -28,58 +28,60 @@ namespace BaseGame
         }
         void ChooseHand()
         {
-            
+
         }
-        public override void MakeMove()
-        {
-            
-        }
-        public override string FindFlush()
+
+        public override void MakeBet(Game.BettingRound bettingRound)
         {
             throw new NotImplementedException();
         }
 
-        public override int FindFourOfKind()
+        protected override int GetHighestCard()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindFullHouse()
+        protected override int FindPair()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindPair()
-        {
-            return -1;
-        }
-
-        public override int FindStraight()
+        protected override int FindTwoPair()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindStraightFlush()
+        protected override int FindThreeOfKind()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindThreeOfKind()
+        protected override int FindStraight()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindTwoPair()
+        protected override string FindFlush()
         {
             throw new NotImplementedException();
         }
 
-        public override int GetHighestCard()
+        protected override int FindFullHouse()
         {
             throw new NotImplementedException();
         }
 
-        public override bool HasRoyalFlush()
+        protected override int FindFourOfKind()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int FindStraightFlush()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool HasRoyalFlush()
         {
             throw new NotImplementedException();
         }

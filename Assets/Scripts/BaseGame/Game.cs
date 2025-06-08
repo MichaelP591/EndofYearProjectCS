@@ -23,10 +23,15 @@ public class Game : MonoBehaviour
     string[] suits = { "diamond", "spade", "heart", "club" };
     private readonly System.Random random = new System.Random();
     public int currentBet = 0;
+    public enum BettingRound
+    {
+        PreFlop, Flop, Turn, River
+    }
+    public BettingRound bettingRound { get; set; }
     void Start()
     {
         for (int i = 0; i < humanPlayerCount; i++) { players.Add(new HumanPlayer()); }
-        for (int i = 0; i < algorithmPlayerCount; i++) { players.Add(new AlgorithmPlayer()); }
+        for (int i = 0; i < algorithmPlayerCount; i++) { players.Add(new AlgorithmPlayer(round)); }
         foreach (Player player in players) { round.AddPlayer(player); }
         for (int i = 0; i < deck.GetLength(0); i++)
         {
@@ -93,7 +98,7 @@ public class Game : MonoBehaviour
 
                 // Get player's betting decision
                 int minimumBet = currentBet - player.CurrentBet;  // How much more they need to call
-                player.MakeMove();  // This will trigger the player's UI or AI decision
+                player.MakeBet(bettingRound);  // This will trigger the player's UI or AI decision
 
 
                 // Handle the player's decision (this will be received through events/callbacks)
@@ -137,8 +142,7 @@ public class Game : MonoBehaviour
             if (contenders.Count == 0) continue;
 
             var winners = round.DeclareWinner(contenders);
-            foreach (Player winner in winners)
-                winner.Stack += pot.Amount;
+            foreach (Player winner in winners) winner.Stack += pot.Amount;
         }
     }
     bool AnyoneIsAllIn()
@@ -149,6 +153,7 @@ public class Game : MonoBehaviour
     }
     void PreFlop() //betting round before any cards are revealed
     {
+        bettingRound = BettingRound.PreFlop;
         ProcessBettingRound();
         round.NextCard();
         round.NextCard();
@@ -156,16 +161,19 @@ public class Game : MonoBehaviour
     }
     void Flop() //betting round after first three cards are revealed
     {
+        bettingRound = BettingRound.Flop;
         ProcessBettingRound();
         round.NextCard();
     }
     void Turn() //betting round before final card reveal
     {
+        bettingRound = BettingRound.Turn;
         ProcessBettingRound();
         round.NextCard();
     }
     void River() //final betting round
     {
+        bettingRound = BettingRound.River;
         ProcessBettingRound();
         if (AnyoneIsAllIn()) CreatePots(players, pots);
     }

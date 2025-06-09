@@ -4,10 +4,7 @@ using BaseGame;
 
 public class CardIdentity : MonoBehaviour
 {
-    public bool showImage1 = true;
-
-    private PokerCard pokerCardScript = GetComponent<PokerCard>();
-
+    
     public int number;
     public string suit;
     public Sprite clubs2;
@@ -17,17 +14,20 @@ public class CardIdentity : MonoBehaviour
 
     void Start()
     {
+		PokerCard pokerCardScript = GetComponent<PokerCard>();
         childImage = GetComponentInChildren<Image>();
         number = pokerCardScript.GetCardNumber();
         suit = pokerCardScript.GetSuit();
 
         if (childImage != null)
         {
-			if (suit.equals("clubs")) {
+			if (suit.Equals("clubs")) {
 				childImage.sprite = clubs2;
+				Debug.Log("clubs");
 			}
 			else {
 				childImage.sprite = diamonds2;
+				Debug.Log("diamonds");
 			}
         }
         else

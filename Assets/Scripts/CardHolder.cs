@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CardHolder : MonoBehaviour,
+                          IPointerEnterHandler,
+                          IPointerExitHandler
 {
     public CardsManager cardsManager;
     public bool available;
@@ -17,12 +19,15 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public enum HolderType
     {
-        Play, Discard, CardTrader, MainHolder
+        Play,
+        Discard,
+        CardTrader,
+        MainHolder
     }
 
     private void Update()
     {
-        HandleCardHolderFunctinallity();
+        HandleCardHolderFunctionality();
 
         foreach (Transform child in transform.GetComponentInChildren<Transform>())
         {
@@ -39,7 +44,7 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    public void HandleCardHolderFunctinallity()
+    public void HandleCardHolderFunctionality()
     {
         if (holderType == HolderType.Play)
         {
@@ -47,10 +52,11 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (cardsManager.SelectedCard != null && transform.childCount > 3)
                 {
-                    if (cardsManager.SelectedCard.GetComponent<Card>().cardNumber ==
-                        transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardNumber ||
-                        cardsManager.SelectedCard.GetComponent<Card>().cardType.CardIcon ==
-                        transform.GetChild(transform.childCount - 1).GetComponent<Card>().cardType.CardIcon)
+                    Card selected = cardsManager.SelectedCard.GetComponent<Card>();
+                    Card lastChildCard = transform.GetChild(transform.childCount - 1).GetComponent<Card>();
+
+                    if (selected.cardNumber == lastChildCard.cardNumber ||
+                        selected.cardType.CardIcon == lastChildCard.cardType.CardIcon)
                     {
                         available = transform.childCount - 3 < maxAmount;
                     }
@@ -69,7 +75,7 @@ public class CardHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 available = transform.childCount - 3 < maxAmount;
             }
 
-            completed = transform.childCount - 3 == amountToComplete;
+            completed = (transform.childCount - 3) == amountToComplete;
         }
 
         if (holderType == HolderType.CardTrader)

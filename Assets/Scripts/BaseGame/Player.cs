@@ -26,7 +26,7 @@ namespace BaseGame
             set
             {
                 if (value.Length == 2) cards = value;
-                foreach (PokerCard card in cards) cardsManager.AddCard(card);
+                ///foreach (PokerCard card in cards) cardsManager.AddCard(card);
             }
         }
         public int Balance { get { return balance; } set { balance = value; } }

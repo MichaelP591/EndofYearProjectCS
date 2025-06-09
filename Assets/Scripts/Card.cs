@@ -4,7 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class Card : MonoBehaviour,
+                    IBeginDragHandler,
+                    IDragHandler,
+                    IEndDragHandler,
+                    IPointerEnterHandler,
+                    IPointerExitHandler,
+                    IPointerClickHandler
 {
     [Header("Settings")]
     public CardState _CardState;
@@ -15,7 +21,9 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public enum CardState
     {
-        Idle, IsDragging, Played
+        Idle,
+        IsDragging,
+        Played
     }
 
     [HideInInspector] public bool CanDrag;
@@ -24,12 +32,16 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     private void Start()
     {
+        // Grab references and register this card
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         cardsManager = GameObject.Find("CardsManager").GetComponent<CardsManager>();
         cardsManager.Cards.Add(gameObject);
         CanDrag = true;
 
-        cardNumber = cardType.setAmount == 0 ? Random.Range(0, cardType.MaxCardNumber) : cardType.setAmount;
+        // Assign a random number unless setAmount != 0
+        cardNumber = (cardType.setAmount == 0)
+            ? Random.Range(0, cardType.MaxCardNumber)
+            : cardType.setAmount;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -47,9 +59,14 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         if (!CanDrag)
             return;
 
+        // Follow the mouse pointer
         Vector2 position;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            (RectTransform)canvas.transform, Input.mousePosition, canvas.worldCamera, out position);
+            (RectTransform)canvas.transform,
+            Input.mousePosition,
+            canvas.worldCamera,
+            out position
+        );
         transform.position = canvas.transform.TransformPoint(position);
     }
 
@@ -60,18 +77,23 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
         if (cardsManager.HoveringMenu != null)
         {
-            if (cardsManager.HoveringMenu.GetComponent<CardHolder>().holderType == CardHolder.HolderType.CardTrader)
+            // If dropping on a CardTrader holder, give the dealer a new card
+            CardHolder holderComponent = cardsManager.HoveringMenu.GetComponent<CardHolder>();
+            if (holderComponent != null &&
+                holderComponent.holderType == CardHolder.HolderType.CardTrader)
             {
                 cardsManager.AddCard(cardNumber);
-            }
+            } 
 
-            Transform target = transform.parent;
-            transform.position = cardsManager.HoveringMenu.transform.position;
+            // FIXED POSITIONING: reparent first, snap localPosition, then destroy old wrapper
+            Transform oldParent = transform.parent;
             transform.SetParent(cardsManager.HoveringMenu.transform);
-            Destroy(target.gameObject); // YES: This is part of the original logic
+            transform.localPosition = Vector2.zero;
+            Destroy(oldParent.gameObject);
         }
         else
         {
+            // Snap back into place in its original layout
             transform.localPosition = Vector2.zero;
         }
 

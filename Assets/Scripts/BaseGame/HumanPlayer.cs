@@ -3,74 +3,85 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseGame;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
+
 
 namespace BaseGame
 {
     public class HumanPlayer : Player
     {
+        [SerializeField] private Button foldButton;
+        [SerializeField] private Button checkButton;
+        [SerializeField] private Button callButton;
+        [SerializeField] private Button raiseButton;
+        [SerializeField] private Button allInButton;
         List<PokerCard> playerHand = new List<PokerCard>();
         void Start()
         {
             playerHand.Add(cards[0]);
             playerHand.Add(cards[1]);
+
+            foldButton.onClick.AddListener(Fold);
+            checkButton.onClick.AddListener(Check);
         }
         void ChooseHand()
         {
-            
+
         }
-        public override int MakeMove()
-        {
-            //implement ui shit here mohit and max
-            return -1;
-        }
-        public override string FindFlush()
+
+        public override void MakeBet(Game.BettingRound bettingRound)
         {
             throw new NotImplementedException();
         }
 
-        public override int FindFourOfKind()
+        protected override int GetHighestCard()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindFullHouse()
+        protected override int FindPair()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindPair()
-        {
-            return -1;
-        }
-
-        public override int FindStraight()
+        protected override int FindTwoPair()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindStraightFlush()
+        protected override int FindThreeOfKind()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindThreeOfKind()
+        protected override int FindStraight()
         {
             throw new NotImplementedException();
         }
 
-        public override int FindTwoPair()
+        protected override string FindFlush()
         {
             throw new NotImplementedException();
         }
 
-        public override int GetHighestCard()
+        protected override int FindFullHouse()
         {
             throw new NotImplementedException();
         }
 
-        public override bool HasRoyalFlush()
+        protected override int FindFourOfKind()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int FindStraightFlush()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool HasRoyalFlush()
         {
             throw new NotImplementedException();
         }

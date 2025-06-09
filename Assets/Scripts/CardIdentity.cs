@@ -4,8 +4,8 @@ using BaseGame;
 
 public class CardIdentity : MonoBehaviour
 {
-    
-    public int number;
+	[SerializeField] Sprite[] deckOfCards;
+	public int number;
     public string suit;
     public Sprite clubs2;
     public Sprite diamonds2;
@@ -15,7 +15,8 @@ public class CardIdentity : MonoBehaviour
     void Start()
     {
 		PokerCard pokerCardScript = GetComponent<PokerCard>();
-        childImage = GetComponentInChildren<Image>();
+		clubs2 = deckOfCards[0];
+		Image childImage = GetComponentInChildren<Image>();
         number = pokerCardScript.GetCardNumber();
         suit = pokerCardScript.GetSuit();
 

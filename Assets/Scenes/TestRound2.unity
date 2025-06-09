@@ -922,6 +922,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2883566077615394953, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b687beff364b1348a14eec9afd9b98a, type: 3}
     - target: {fileID: 4599707624552355120, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
       propertyPath: target
       value: 
@@ -941,8 +945,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8729051308930566727, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1222777414614092417}
+    - targetCorrespondingSourceObject: {fileID: 8729051308930566727, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1222777414614092416}
   m_SourcePrefab: {fileID: 100100000, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
+--- !u!1 &1613637386 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8729051308930566727, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
+  m_PrefabInstance: {fileID: 1613637385}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1743862522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,8 +1044,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a166b5636b27ae4aabea52949e7acbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerHandLayout: {fileID: 942587824}
-  DealerHandLayout: {fileID: 1893837816}
   SelectedCard: {fileID: 0}
   HoveringMenu: {fileID: 0}
   cardType: {fileID: 0}
@@ -1313,8 +1326,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1818078309}
         m_TargetAssemblyTypeName: CardsManager, Assembly-CSharp
-        m_MethodName: DrawCard
-        m_Mode: 1
+        m_MethodName: AddCard
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1434,6 +1447,39 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1222777413002308982, guid: 1dab1df46690a4f44a465e7054f7a4e2, type: 3}
   m_PrefabInstance: {fileID: 1613637385}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1222777414614092416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613637386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b09bcbe3e54b440baa114dedfb3ec49c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 0
+  suit: dimon
+--- !u!114 &1222777414614092417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613637386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557ab53ea926b4d57a63f79d6611c8c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deckOfCards:
+  - {fileID: 21300000, guid: 376aee22e261c2047bf9c5428eb5b948, type: 3}
+  - {fileID: 21300000, guid: 857d428242a4f7d4aa1a05c7f5590c43, type: 3}
+  number: 0
+  suit: 
+  clubs2: {fileID: 21300000, guid: 376aee22e261c2047bf9c5428eb5b948, type: 3}
+  diamonds2: {fileID: 21300000, guid: 857d428242a4f7d4aa1a05c7f5590c43, type: 3}
 --- !u!1001 &2178964875265467159
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,26 +1,47 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BaseGame;
 using JetBrains.Annotations;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
+
 namespace BaseGame
 {
     public class AlgorithmPlayer : Player 
     {
-        private int totalSpent = 0;
+        public double potW = 0.5; // how much the pot will affect the move that is made
+        public double ehsW = 0.5; // how much the effective handed strength will impact things
         public Round round;
-        public AlgorithmPlayer(Round round) {
+        public AlgorithmPlayer(Round round)
+        {
             this.round = round;
         }
-        private readonly System.Random random = new System.Random();
         public override void MakeBet(Game.BettingRound bettingRound) // Makes a bet based on effective hand strength, pot size, and amount of time spent 
         {
-            
-            if (bettingRound == Game.BettingRound.PreFlop) Check();
+            if (bettingRound == Game.BettingRound.PreFlop)
+            {
+                int strength = GetHighestCard(Hand.ToList());
+                
+            }
+            if (bettingRound == Game.BettingRound.Flop)
+            {
+                
+            }
+            if (bettingRound == Game.BettingRound.Turn)
+            {
+                
+            }
+            if (bettingRound == Game.BettingRound.River)
+            {
+                
+            }
+            double max = TotalPot(new Pot[2]) + EffectiveHS();
+            if (bettingRound == Game.BettingRound.PreFlop) Call(1);
             if (EffectiveHS() < 0.05) Fold();
             if (true) Check();
             if (EffectiveHS() > 0.99) AllIn();
@@ -40,31 +61,43 @@ namespace BaseGame
             int behind = 0;
             int tied = 0;
 
-            PokerCard[,] deck = MakeDeck();
-
-            for (int i = 0; i < deck.GetLength(0); i++)
+            PokerCard[] deck = MakeDeck();
+            
+            for (int i = 0; i < deck.Length; i++)
             {
-                for (int j = 0; j < deck.GetLength(1); j++)
+                for (int j = 0; j < deck.Length; j++)
                 {
-                    PokerCard c = deck[i, j];
-                    int opprank = Math.Max(GetHighestCard(round.knownCards), GetHighestCard(new List<PokerCard>(cards)));
+                    if (i == j || deck[i] == null || deck[j] == null) continue;
+                    List<PokerCard> oppcards = new List<PokerCard> { deck[i], deck[j] };
+                    int opprank = Math.Max(GetHighestCard(round.knownCards), GetHighestCard(oppcards));
+
                     if (ourrank > opprank) index = ahead;
                     else if (ourrank == opprank) index = tied;
                     else index = behind;
                     HPTotal[index] += 1;
 
                     // All possible board cards to come
-                    // for each case(turn, river) {
-                    //     // Final 5-card board
-                    //     board = [boardcards, turn, river]
-                    //     ourbest = Rank(ourcards, board)
-                    //     oppbest = Rank(oppcards, board)
-                    //     if (ourbest > oppbest) HP[index][ahead] += 1
-                    //     else if (ourbest == oppbest) HP[index][tied] += 1
-                    //     else HP[index][behind] += 1
-                    // }
+                    for (int a = 0; a < deck.Length; a++)
+                    {
+                        for (int b = 0; b < deck.Length; b++)
+                        {
+                            if (a == b || deck[a] == null || deck[b] == null || a == i || a == j || b == i || b == j) continue;
+                            PokerCard[] board = new PokerCard[5]; //[boardcards, turn, river]
+                            int ind = 0;
+                            foreach (PokerCard c in round.knownCards) board[ind++] = c;
+                            board[4] = deck[a];
+                            board[5] = deck[b];
+
+                            int ourbest = Math.Max(GetHighestCard(Hand.ToList()), GetHighestCard(new List<PokerCard>(board)));
+                            int oppbest = Math.Max(GetHighestCard(board.ToList()), GetHighestCard(new List<PokerCard>(oppcards))); 
+                            if (ourbest > oppbest) HP[index, ahead] += 1;
+                            else if (ourbest == oppbest) HP[index, tied] += 1;
+                            else HP[index, behind] += 1;
+                        }
+                    }
                 }
             }
+
             // Ppot: were behind but moved ahead
             double Ppot = (HP[behind, ahead] + HP[behind, tied] / 2 + HP[tied, ahead] / 2) / (HPTotal[behind] + HPTotal[tied]);
             // Npot: were ahead but fell behind
@@ -74,16 +107,20 @@ namespace BaseGame
         }
         double CurrHS()
         {
-            PokerCard[,] deck = MakeDeck();
+            PokerCard[] deck = MakeDeck();
             int ahead = 0;
             int behind = 0;
             int tied = 0;
-            for (int i = 0; i < deck.GetLength(0); i++)
+            int ourrank = round.GetHighestCard(this);
+
+            for (int i = 0; i < deck.Length; i++)
             {
-                for (int j = 0; j < deck.GetLength(1); i++)
+                for (int j = 0; j < deck.Length; j++)
                 {
-                    int opprank = Math.Max(GetHighestCard(round.knownCards), GetHighestCard(new List<PokerCard>(cards)));
-                    int ourrank = round.GetHighestCard(this);
+                    if (i == j || deck[i] == null || deck[j] == null) continue;
+                    List<PokerCard> oppcards = new List<PokerCard> { deck[i], deck[j] };
+
+                    int opprank = Math.Max(GetHighestCard(round.knownCards), GetHighestCard(oppcards));
                     if (ourrank > opprank) ahead++;
                     else if (ourrank == opprank) tied++;
                     else behind++;
@@ -97,22 +134,22 @@ namespace BaseGame
             foreach (PokerCard c in cards) if (c.GetCardNumber() > max) max = c.GetCardNumber();
             return max;
         }
-        PokerCard[,] MakeDeck()
+        PokerCard[] MakeDeck()
         {
-            PokerCard[,] deck = new PokerCard[4, 13];
+            PokerCard[] deck = new PokerCard[52];
             string[] suits = { "diamond", "spade", "heart", "club" };
 
-            for (int i = 0; i < deck.GetLength(0); i++)
-                for (int j = 0; j < deck.GetLength(1); i++)
-                    deck[i, j] = new PokerCard(j + 2, suits[i]);
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 13; i++)
+                    deck[i*j] = new PokerCard(j + 2, suits[i]);
 
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 13; j++)
                 {
-                    if (deck[i, j] == cards[0] || deck[i, j] == cards[1]) deck[i, j] = null;
+                    if (deck[i * j] == cards[0] || deck[i * j] == cards[1]) deck[i * j] = null;
                     foreach (PokerCard c in round.knownCards)
-                        if (deck[i, j] == c) deck[i, j] = null;
+                        if (deck[i * j] == c) deck[i * j] = null;
                 }
             }
             return deck;

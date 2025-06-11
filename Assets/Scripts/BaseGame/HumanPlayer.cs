@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseGame;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,11 +18,11 @@ namespace BaseGame
         [SerializeField] private Button callButton;
         [SerializeField] private Button raiseButton;
         [SerializeField] private Button allInButton;
-        List<PokerCard> playerHand = new List<PokerCard>();
+        PokerCard[] playerHand = new PokerCard[5];
         void Start()
         {
-            playerHand.Add(cards[0]);
-            playerHand.Add(cards[1]);
+            playerHand[0] = cards[0];
+            playerHand[1] = cards[1];
 
             foldButton.onClick.AddListener(Fold);
             checkButton.onClick.AddListener(Check);
@@ -38,17 +39,41 @@ namespace BaseGame
 
         protected override int GetHighestCard()
         {
-            throw new NotImplementedException();
+            List<PokerCard> hand = playerHand.ToList();
+            hand.Sort((a, b) => a.GetCardNumber().CompareTo(b.GetCardNumber()));
+            return hand.Last().GetCardNumber();
         }
 
         protected override int FindPair()
         {
-            throw new NotImplementedException();
+            List<PokerCard> hand = playerHand.ToList();
+            hand.Sort((a, b) => a.GetCardNumber().CompareTo(b.GetCardNumber()));
+            for (int i = hand.Count() - 1; i > 1; i--)
+            {
+                if (hand.ElementAt(i).GetCardNumber() == hand.ElementAt(i - 1).GetCardNumber())
+                {
+                    return hand.ElementAt(i).GetCardNumber();
+                }
+            }
+            return -1;
         }
 
         protected override int FindTwoPair()
         {
-            throw new NotImplementedException();
+            List<PokerCard> hand = playerHand.ToList();
+            hand.Sort((a, b) => a.GetCardNumber().CompareTo(b.GetCardNumber()));
+            int firstPair = FindPair();
+            int secondPair = 0;
+            if (firstPair == -1) return -1;
+            for (int i = 0; i < hand.Count() - 1; i++)
+            {
+                if (hand.ElementAt(i).GetCardNumber() == hand.ElementAt(i + 1).GetCardNumber())
+                {
+                    secondPair = hand.ElementAt(i).GetCardNumber();
+                    continue;
+                }
+            }
+            return -1;
         }
 
         protected override int FindThreeOfKind()

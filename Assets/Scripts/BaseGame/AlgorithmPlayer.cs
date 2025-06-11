@@ -14,8 +14,8 @@ namespace BaseGame
 {
     public class AlgorithmPlayer : Player 
     {
-        public double potW = 0.5; // how much the pot will affect the move that is made
-        public double ehsW = 0.5; // how much the effective handed strength will impact things
+        [SerializeField] double potW = 0.5; // how much the pot will affect the move that is made
+        [SerializeField] double ehsW = 0.5; // how much the effective handed strength will impact things
         public Round round;
         public AlgorithmPlayer(Round round)
         {

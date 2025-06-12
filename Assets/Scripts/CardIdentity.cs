@@ -158,7 +158,7 @@ public class CardIdentity : MonoBehaviour
 		        }
 		        Debug.Log("hearts");
 	        }
-			else {
+			else if (suit.Equals("spades")){
 				switch (number)
 				{
 					case 1:
@@ -202,6 +202,10 @@ public class CardIdentity : MonoBehaviour
 						break;
 				}
 				Debug.Log("spades");
+			}
+			else
+			{
+				childImage.sprite = clubs2;
 			}
         }
         else

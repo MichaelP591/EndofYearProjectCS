@@ -1,131 +1,216 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Splines;
+using UnityEngine.UI;
+using DG.Tweening; // DOTween - you'll need to import this package
 
 public class HandManager : MonoBehaviour
 {
-    [SerializeField] private int maxHandSize = 7;
-    [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private Canvas mainCanvas;
-    [SerializeField] private Transform spawnPoint; // Position this in canvas space
+    [Header("Card Settings")]
+    [SerializeField] private RectTransform fromTransform; // Where cards originate from (UI element)
+    [SerializeField] private GameObject cardPrefab; // Card prefab (must have RectTransform)
+    [SerializeField] private float cardOffsetX = 20f; // Horizontal spacing between cards
+    [SerializeField] private float rotMaxDegrees = 10f; // Maximum rotation in degrees
+    [SerializeField] private float animOffsetY = 0.3f; // Floating animation intensity
+    [SerializeField] private float timeMultiplier = 2f; // Speed of floating animation
     
-    // Define your hand curve directly in canvas coordinates
-    [SerializeField] private AnimationCurve handCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 0f);
-    [SerializeField] private float handWidth = 600f; // Width of hand in canvas units
-    [SerializeField] private float handHeight = 100f; // Height of curve in canvas units
-    [SerializeField] private Vector2 handCenter = new Vector2(0, -300); // Center position of hand
+    [Header("Animation Settings")]
+    [SerializeField] private float drawDuration = 0.3f; // Base animation duration
+    [SerializeField] private float cardDelay = 0.075f; // Delay between each card animation
+    [SerializeField] private float floatFadeDuration = 1.5f; // How long to fade in floating effect
     
-    private List<GameObject> handCards = new List<GameObject>();
-
+    private List<RectTransform> cards = new List<RectTransform>();
+    private List<Vector2> cardBasePositions = new List<Vector2>(); // Store base positions for floating
+    private float time = 0f;
+    private float sineOffsetMultiplier = 0f;
+    private bool drawn = false;
+    private bool isFloating = false;
+    
+    // This component must be on a Canvas or child of Canvas
+    private RectTransform rectTransform;
+    
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            Debug.LogError("CardHandManager must be attached to a GameObject with RectTransform (UI element)");
+        }
+    }
+    
+    private void Start()
+    {
+        // Wait 2 seconds like in the original Godot code
+        StartCoroutine(DelayedStart());
+    }
+    
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitForSeconds(2f);
+        // You can call DrawCards here if you want to test
+        // DrawCards(fromTransform.anchoredPosition, 10);
+    }
+    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isFloating && cards.Count > 0)
         {
-            DrawCard();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RemoveAllCards();
-        }
-    }
-
-    private void DrawCard()
-    {
-        if (handCards.Count >= maxHandSize) return;
-
-        // Spawn card at spawn point (in canvas space)
-        GameObject card = Instantiate(cardPrefab, mainCanvas.transform);
-        RectTransform cardRect = card.GetComponent<RectTransform>();
-        
-        // Set initial position to spawn point
-        if (spawnPoint != null)
-        {
-            cardRect.position = spawnPoint.position;
-        }
-        
-        handCards.Add(card);
-        UpdateCardPositions();
-    }
-
-    private void UpdateCardPositions()
-    {
-        if (handCards.Count == 0) return;
-
-        for (int i = 0; i < handCards.Count; i++)
-        {
-            // Calculate position along the hand (0 to 1)
-            float t = handCards.Count == 1 ? 0.5f : i / (float)(handCards.Count - 1);
+            time += Time.deltaTime;
             
-            // Get position on our custom curve
-            Vector2 cardPosition = GetHandPosition(t);
-            
-            // Get rotation for card fan effect
-            float cardRotation = GetHandRotation(t);
-            
-            // Animate to position
-            RectTransform cardRect = handCards[i].GetComponent<RectTransform>();
-            cardRect.DOAnchorPos(cardPosition, 0.3f);
-            cardRect.DORotate(new Vector3(0, 0, cardRotation), 0.3f);
-            
-            // Set card order (optional - for visual layering)
-            cardRect.SetSiblingIndex(i);
-        }
-    }
-
-    private Vector2 GetHandPosition(float t)
-    {
-        // Calculate X position across the hand width
-        float x = Mathf.Lerp(-handWidth / 2f, handWidth / 2f, t);
-        
-        // Calculate Y position using the curve
-        float curveValue = handCurve.Evaluate(t);
-        float y = curveValue * handHeight;
-        
-        // Add to hand center position
-        return handCenter + new Vector2(x, y);
-    }
-
-    private float GetHandRotation(float t)
-    {
-        // Create a fan effect - cards rotate based on their position
-        float maxRotation = 15f; // Maximum rotation in degrees
-        return Mathf.Lerp(-maxRotation, maxRotation, t);
-    }
-
-    private void RemoveAllCards()
-    {
-        foreach (GameObject card in handCards)
-        {
-            if (card != null) DestroyImmediate(card);
-        }
-        handCards.Clear();
-    }
-
-    // Visualize the hand curve in the scene view
-    private void OnDrawGizmos()
-    {
-        if (mainCanvas == null) return;
-        
-        Gizmos.color = Color.yellow;
-        Vector3 lastPoint = Vector3.zero;
-        
-        for (int i = 0; i <= 20; i++)
-        {
-            float t = i / 20f;
-            Vector2 canvasPos = GetHandPosition(t);
-            
-            // Convert canvas position to world position for gizmo drawing
-            Vector3 worldPos = mainCanvas.transform.TransformPoint(canvasPos);
-            
-            if (i > 0)
+            for (int i = 0; i < cards.Count; i++)
             {
-                Gizmos.DrawLine(lastPoint, worldPos);
+                if (cards[i] != null)
+                {
+                    float sineValue = Mathf.Sin(i + (time * timeMultiplier));
+                    Vector2 newPos = cardBasePositions[i];
+                    newPos.y += sineValue * sineOffsetMultiplier;
+                    cards[i].anchoredPosition = newPos;
+                }
             }
-            lastPoint = worldPos;
         }
+    }
+    
+    public void DrawCards(Vector2 fromPosition, int numberOfCards)
+    {
+        drawn = true;
+        
+        // Kill any existing tweens
+        DOTween.Kill(this);
+        
+        // Clear previous data
+        cards.Clear();
+        cardBasePositions.Clear();
+        
+        // Create cards
+        for (int i = 0; i < numberOfCards; i++)
+        {
+            // Instantiate card as child of this transform
+            GameObject cardInstance = Instantiate(cardPrefab, transform);
+            RectTransform cardRect = cardInstance.GetComponent<RectTransform>();
+            
+            if (cardRect == null)
+            {
+                Debug.LogError("Card prefab must have a RectTransform component!");
+                Destroy(cardInstance);
+                continue;
+            }
+            
+            // Set initial position to origin
+            cardRect.anchoredPosition = fromPosition;
+            
+            // Calculate final position
+            Vector2 finalPosition = CalculateCardPosition(i, numberOfCards, cardRect);
+            
+            // Calculate rotation
+            float rotationAngle = CalculateCardRotation(i, numberOfCards);
+            
+            // Add to cards list and store base position
+            cards.Add(cardRect);
+            cardBasePositions.Add(finalPosition);
+            
+            // Animate to final position with staggered timing
+            float animDelay = i * cardDelay;
+            cardRect.DOAnchorPos(finalPosition, drawDuration + animDelay)
+                .SetDelay(animDelay)
+                .SetEase(Ease.InOutCubic);
+                
+            cardRect.DORotate(new Vector3(0, 0, rotationAngle), drawDuration + animDelay)
+                .SetDelay(animDelay)
+                .SetEase(Ease.InOutCubic);
+        }
+        
+        // Start floating animation after cards are drawn
+        float totalAnimTime = drawDuration + (numberOfCards - 1) * cardDelay;
+        DOVirtual.DelayedCall(totalAnimTime, () => {
+            isFloating = true;
+            DOTween.To(() => sineOffsetMultiplier, x => sineOffsetMultiplier = x, animOffsetY, floatFadeDuration)
+                .SetEase(Ease.InOutCubic);
+        });
+    }
+    
+    public void UndrawCards(Vector2 toPosition)
+    {
+        drawn = false;
+        isFloating = false;
+        
+        // Kill any existing tweens
+        DOTween.Kill(this);
+        
+        // Fade out floating effect
+        DOTween.To(() => sineOffsetMultiplier, x => sineOffsetMultiplier = x, 0f, 0.9f)
+            .SetEase(Ease.InOutCubic);
+        
+        // Animate cards back to origin in reverse order
+        for (int i = cards.Count - 1; i >= 0; i--)
+        {
+            if (cards[i] != null)
+            {
+                float animDelay = (cards.Count - i) * cardDelay;
+                
+                cards[i].DOAnchorPos(toPosition, drawDuration + animDelay)
+                    .SetDelay(animDelay)
+                    .SetEase(Ease.InOutCubic);
+                    
+                cards[i].DORotate(Vector3.zero, drawDuration + animDelay)
+                    .SetDelay(animDelay)
+                    .SetEase(Ease.InOutCubic);
+            }
+        }
+        
+        // Clean up cards after animation
+        float totalAnimTime = drawDuration + cards.Count * cardDelay;
+        DOVirtual.DelayedCall(totalAnimTime, () => {
+            foreach (RectTransform card in cards)
+            {
+                if (card != null)
+                    Destroy(card.gameObject);
+            }
+            cards.Clear();
+            cardBasePositions.Clear();
+        });
+    }
+    
+    private Vector2 CalculateCardPosition(int cardIndex, int totalCards, RectTransform cardRect)
+    {
+        // Get card size from RectTransform
+        Vector2 cardSize = cardRect.sizeDelta;
+        
+        // Center the card on its position (equivalent to -(instance.size / 2.0) in Godot)
+        Vector2 finalPosition = new Vector2(-cardSize.x / 2f, -cardSize.y / 2f);
+        
+        // Add horizontal offset for fan formation
+        finalPosition.x -= cardOffsetX * (totalCards - 1 - cardIndex);
+        
+        // Center the entire hand
+        finalPosition.x += (cardOffsetX * (totalCards - 1)) / 2f;
+        
+        return finalPosition;
+    }
+    
+    private float CalculateCardRotation(int cardIndex, int totalCards)
+    {
+        if (totalCards == 1) return 0f;
+        
+        float normalizedPosition = (float)cardIndex / (float)(totalCards - 1);
+        return Mathf.Lerp(-rotMaxDegrees, rotMaxDegrees, normalizedPosition);
+    }
+    
+    // Button callback - attach this to a UI button
+    public void OnDrawButtonPressed()
+    {
+        if (drawn)
+        {
+            UndrawCards(fromTransform.anchoredPosition);
+        }
+        else
+        {
+            DrawCards(fromTransform.anchoredPosition, 10);
+        }
+    }
+    
+    // Alternative method if you want to use it from code
+    public void ToggleCards()
+    {
+        OnDrawButtonPressed();
     }
 }

@@ -21,27 +21,27 @@ namespace BaseGame
         {
             this.round = round;
         }
-        public override void MakeBet(Game.BettingRound bettingRound) // Makes a bet based on effective hand strength, pot size, and amount of time spent 
+        public override void MakeBet(PokerGame.BettingRound bettingRound) // Makes a bet based on effective hand strength, pot size, and amount of time spent 
         {
-            if (bettingRound == Game.BettingRound.PreFlop)
+            if (bettingRound == PokerGame.BettingRound.PreFlop)
             {
                 int strength = GetHighestCard(Hand.ToList());
                 
             }
-            if (bettingRound == Game.BettingRound.Flop)
+            if (bettingRound == PokerGame.BettingRound.Flop)
             {
                 
             }
-            if (bettingRound == Game.BettingRound.Turn)
+            if (bettingRound == PokerGame.BettingRound.Turn)
             {
                 
             }
-            if (bettingRound == Game.BettingRound.River)
+            if (bettingRound == PokerGame.BettingRound.River)
             {
                 
             }
             double max = TotalPot(new Pot[2]) + EffectiveHS();
-            if (bettingRound == Game.BettingRound.PreFlop) Call(1);
+            if (bettingRound == PokerGame.BettingRound.PreFlop) Call(1);
             if (EffectiveHS() < 0.05) Fold();
             if (true) Check();
             if (EffectiveHS() > 0.99) AllIn();

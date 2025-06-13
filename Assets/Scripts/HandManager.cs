@@ -9,6 +9,8 @@ public class HandManager : MonoBehaviour
     [Header("Card Settings")]
     [SerializeField] private RectTransform fromTransform; // Where cards originate from (UI element)
     [SerializeField] private GameObject cardPrefab; // Card prefab (must have RectTransform)
+    [SerializeField] private Sprite cardSprite; // Alternative: assign sprite directly
+    [SerializeField] private Vector2 cardSize = new Vector2(100, 140); // Card dimensions
     [SerializeField] private float cardOffsetX = 20f; // Horizontal spacing between cards
     [SerializeField] private float rotMaxDegrees = 10f; // Maximum rotation in degrees
     [SerializeField] private float animOffsetY = 0.3f; // Floating animation intensity
@@ -84,19 +86,66 @@ public class HandManager : MonoBehaviour
         // Create cards
         for (int i = 0; i < numberOfCards; i++)
         {
-            // Instantiate card as child of this transform
-            GameObject cardInstance = Instantiate(cardPrefab, transform);
-            RectTransform cardRect = cardInstance.GetComponent<RectTransform>();
+            GameObject cardInstance;
+            RectTransform cardRect;
+            Image cardImage;
+            if (cardPrefab != null)
+            {
+                // Use prefab
+                cardInstance = Instantiate(cardPrefab, transform);
+                cardRect = cardInstance.GetComponent<RectTransform>();
+            }
+            else if (cardSprite != null)
+            {
+                // Create card from sprite
+                cardInstance = new GameObject($"Card_{i}");
+                cardInstance.transform.SetParent(transform);
+                
+                cardRect = cardInstance.AddComponent<RectTransform>();
+                cardImage = cardInstance.AddComponent<Image>();
+                cardImage.sprite = cardSprite;
+                cardImage.color = Color.white;
+                
+                // Set card size
+                cardRect.sizeDelta = cardSize;
+            }
+            else
+            {
+                Debug.LogError("Either cardPrefab or cardSprite must be assigned!");
+                return;
+            }
             
             if (cardRect == null)
             {
-                Debug.LogError("Card prefab must have a RectTransform component!");
+                Debug.LogError("Card must have a RectTransform component!");
                 Destroy(cardInstance);
                 continue;
             }
             
+            // Debug: Check if Image component exists and is configured
+            cardImage = cardInstance.GetComponent<Image>();
+            if (cardImage == null)
+            {
+                Debug.LogWarning($"Card {i} has no Image component!");
+            }
+            else if (cardImage.sprite == null)
+            {
+                Debug.LogWarning($"Card {i} Image has no sprite assigned!");
+            }
+            else
+            {
+                Debug.Log($"Card {i} created successfully with sprite: {cardImage.sprite.name}");
+                // Ensure the card is fully opaque
+                cardImage.color = Color.white;
+            }
+            
             // Set initial position to origin
             cardRect.anchoredPosition = fromPosition;
+            
+            // Ensure card stays in UI plane (Z = 0)
+            Vector3 localPos = cardRect.localPosition;
+            localPos.z = 0f;
+            cardRect.localPosition = localPos;
             
             // Calculate final position
             Vector2 finalPosition = CalculateCardPosition(i, numberOfCards, cardRect);

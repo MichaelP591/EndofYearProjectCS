@@ -31,7 +31,7 @@ namespace BaseGame
 
         }
 
-        public override void MakeBet(Game.BettingRound bettingRound)
+        public override void MakeBet(PokerGame.BettingRound bettingRound)
         {
             throw new NotImplementedException();
         }

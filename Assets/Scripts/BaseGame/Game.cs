@@ -11,12 +11,12 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.XR;
 
-public class Game : MonoBehaviour
+public class PokerGame : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int humanPlayerCount;
     public int algorithmPlayerCount;
-    Round round = new Round();
+    public Round round = new Round();
     List<Player> players;
     List<Pot> pots = new List<Pot>();
     PokerCard[,] deck = new PokerCard[4, 13];
@@ -82,6 +82,9 @@ public class Game : MonoBehaviour
                 }
             } while (true);
         }
+        Instantiate(GameObject.Find("Board").GetComponent<BoardScript>().CardParent, GameObject.Find("Board").GetComponent<BoardScript>().CommunityCardsLayout.transform);
+        BoardScript board = GameObject.Find("Board").GetComponent<BoardScript>();
+        board.DealCommunityCards(new List<PokerCard>(houseHand));
     }
     private void ProcessBettingRound()
     {

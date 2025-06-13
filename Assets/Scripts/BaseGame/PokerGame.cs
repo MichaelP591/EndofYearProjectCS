@@ -84,7 +84,7 @@ public class PokerGame : MonoBehaviour
         }
         Instantiate(GameObject.Find("Board").GetComponent<BoardScript>().CardParent, GameObject.Find("Board").GetComponent<BoardScript>().CommunityCardsLayout.transform);
         BoardScript board = GameObject.Find("Board").GetComponent<BoardScript>();
-        board.DealCommunityCards(new List<PokerCard>(houseHand));
+        board.DealCommunityCards();
     }
     private void ProcessBettingRound()
     {

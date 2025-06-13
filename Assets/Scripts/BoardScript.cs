@@ -6,9 +6,9 @@ using BaseGame;
 public class BoardScript : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject CardParent;
+    public GameObject CardParent;
     [SerializeField] private GameObject CardFace;
-    [SerializeField] private HorizontalLayoutGroup CommunityCardsLayout;
+    public HorizontalLayoutGroup CommunityCardsLayout;
     [SerializeField] private GameObject CardVisualsParent;
 
     [Header("Card Management")]
@@ -38,7 +38,7 @@ public class BoardScript : MonoBehaviour
         }
     }
 
-    private void DealCommunityCards()
+    public void DealCommunityCards()
     {
         // Clear existing cards
         foreach (Transform child in CommunityCardsLayout.transform)

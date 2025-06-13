@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class CardType : ScriptableObject
 {
     [Header("Info")]
     public Sprite CardIcon;
-    public int MaxCardNumber;
-    public int setAmount;
+    public String Suit;
+    public int setAmount =13; // Default to 13 for a standard deck
+    public String Value;
+    public bool IsFaceDown = true; // Default to face down
 }

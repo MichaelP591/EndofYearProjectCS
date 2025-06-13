@@ -73,7 +73,7 @@ namespace BaseGame
         }
         
         public void Check() { LastAction = PlayerAction.Check; CurrentBet = 0; }
-        public abstract void MakeBet(Game.BettingRound bettingRound);
+        public abstract void MakeBet(PokerGame.BettingRound bettingRound);
         protected abstract int GetHighestCard();
         protected abstract int FindPair();
         protected abstract int FindTwoPair();

@@ -34,6 +34,18 @@ namespace BaseGame
         {
             return obj.GetCardNumber() == this.GetCardNumber() && obj.GetSuit() == this.GetSuit();
         }
+
+
+        public void SetCardNumber(int number)
+        {
+            if (number < 2 || number > 14) throw new System.Exception("Invalid card number");
+            num = number;
+        }   
+        public void SetSuit(string suit)
+        {
+            if (!suits.Contains(suit)) throw new System.Exception("Invalid suit");
+            this.suit = suit;
+        }
         public bool IsSameSuit(PokerCard obj)
         {
             return obj.GetSuit() == this.GetSuit();

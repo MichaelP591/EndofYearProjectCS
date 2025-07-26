@@ -83,7 +83,7 @@ public class Card : MonoBehaviour,
                 holderComponent.holderType == CardHolder.HolderType.CardTrader)
             {
                 cardsManager.AddCard(cardNumber);
-            } 
+            }
 
             // FIXED POSITIONING: reparent first, snap localPosition, then destroy old wrapper
             Transform oldParent = transform.parent;

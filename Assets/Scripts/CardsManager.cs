@@ -70,7 +70,7 @@ public class CardsManager : MonoBehaviour
             }
             if (selX < othX && selIdx > othIdx)
             {
-                SwapCards(SelectedCard, other);
+                SwapCards(other,  SelectedCard);
                 break;
             }
         }
@@ -86,7 +86,7 @@ public class CardsManager : MonoBehaviour
 
         if (a.GetComponent<Card>()._CardState != Card.CardState.IsDragging)
             a.transform.localPosition = Vector2.zero;
-        b.transform.localPosition = Vector2.zero;
+            b.transform.localPosition = Vector2.zero;
     }
 
     public void PlayCard()
